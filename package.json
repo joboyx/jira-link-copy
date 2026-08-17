@@ -1,0 +1,46 @@
+{
+  "name": "jira-link-copy",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Chrome extension that copies a formatted Jira issue link from the current tab.",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "setup": "npm ci",
+    "dev": "wxt",
+    "build": "wxt build",
+    "clean": "rm -rf .output dist coverage .wxt",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint . --max-warnings=0",
+    "prepare": "husky && wxt prepare",
+    "start": "wxt",
+    "test": "npm run lint && npm run type-coverage && npm run test:unit && npm run build",
+    "test:unit": "jest --coverage",
+    "test:unit:watch": "jest --watch",
+    "type-coverage": "type-coverage --project tsconfig.json --at-least 100",
+    "zip": "wxt zip",
+    "deploy": "npm run test && wxt zip"
+  },
+  "lint-staged": {
+    "*": "prettier --write --ignore-unknown"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^26.2.0",
+    "eslint": "^10.8.1",
+    "husky": "^9.1.7",
+    "jest": "^30.4.2",
+    "jest-environment-jsdom": "^30.4.1",
+    "lint-staged": "^17.3.0",
+    "prettier": "^3.9.6",
+    "ts-jest": "^29.4.12",
+    "type-coverage": "^2.30.1",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.67.0",
+    "wxt": "^0.21.4"
+  }
+}
