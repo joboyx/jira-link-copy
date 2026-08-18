@@ -1,4 +1,4 @@
-import { escapeAttr, escapeHtml, escapeMarkdownLabel } from './escape';
+import { escapeAttr, escapeHtml } from './escape';
 
 export interface JiraIssue {
   key: string;
@@ -18,11 +18,10 @@ export function formatLinkLabel(issue: JiraIssue): string {
 }
 
 /**
- * Markdown link for editors that paste plain text.
+ * Visible label only. Apps that paste as plain text use this, with no hyperlink.
  */
 export function formatPlainText(issue: JiraIssue): string {
-  const label = escapeMarkdownLabel(formatLinkLabel(issue));
-  return `[${label}](${issue.browseUrl})`;
+  return formatLinkLabel(issue);
 }
 
 /**

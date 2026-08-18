@@ -1,5 +1,5 @@
 import { formatHtml, formatLinkLabel, formatPlainText } from '../src/lib/format-link';
-import { escapeHtml, escapeMarkdownLabel } from '../src/lib/escape';
+import { escapeHtml } from '../src/lib/escape';
 
 const issue = {
   key: 'ABC-12',
@@ -18,15 +18,13 @@ describe('formatLinkLabel', () => {
 });
 
 describe('formatPlainText', () => {
-  it('returns a markdown link', () => {
-    expect(formatPlainText(issue)).toBe(
-      '[ABC-12: Reset password flow](https://jira.example.com/browse/ABC-12)',
-    );
+  it('returns the visible label with no hyperlink', () => {
+    expect(formatPlainText(issue)).toBe('ABC-12: Reset password flow');
   });
 
-  it('escapes brackets in the summary', () => {
+  it('does not wrap a summary with brackets as a markdown link', () => {
     expect(formatPlainText({ ...issue, summary: 'Fix [beta] flag' })).toBe(
-      '[ABC-12: Fix \\[beta\\] flag](https://jira.example.com/browse/ABC-12)',
+      'ABC-12: Fix [beta] flag',
     );
   });
 });
@@ -48,9 +46,5 @@ describe('formatHtml', () => {
 describe('escape helpers', () => {
   it('escapes HTML entities', () => {
     expect(escapeHtml(`&<>"'`)).toBe('&amp;&lt;&gt;&quot;&#39;');
-  });
-
-  it('escapes markdown label brackets', () => {
-    expect(escapeMarkdownLabel('a[b]c')).toBe('a\\[b\\]c');
   });
 });
