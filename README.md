@@ -2,6 +2,19 @@
 
 Chrome extension that copies a formatted Jira issue link from the current tab.
 
+## Install
+
+Download the latest release zip. You do not need to clone the repo or run a build.
+
+1. Open the latest GitHub Release.
+2. Download the Chrome zip.
+3. Unzip the file.
+4. Open `chrome://extensions`.
+5. Enable Developer mode.
+6. Choose Load unpacked and select the unzipped folder.
+
+Release page: https://github.com/joboyx/jira-link-copy/releases/latest
+
 ## What it copies
 
 - Rich text (normal paste): `ABC-123: Summary` as a link to `https://<host>/browse/ABC-123`
@@ -26,7 +39,7 @@ Default: Alt+X (Option+X on Mac). Change the shortcut in `chrome://extensions/sh
 
 Click the toolbar icon to copy the same way.
 
-## Install unpacked
+## Develop
 
 Requires Node 20 or newer.
 
@@ -46,7 +59,19 @@ For local reload while you edit, run `npm start` and load `.output/chrome-mv3` t
 | `npm start`     | Build in watch mode                        |
 | `npm run build` | Production build                           |
 | `npm test`      | Lint, type coverage, unit tests, and build |
-| `npm run zip`   | Pack a store zip                           |
+| `npm run zip`   | Pack a Chrome zip                          |
+
+## Release
+
+A version tag that matches `v*` starts the Release workflow.
+
+    git tag v0.1.0
+    git push origin v0.1.0
+
+The workflow tests, zips, and attaches the Chrome zip to a GitHub Release.
+You can also run the workflow by hand and pass a tag name.
+
+Keep the `package.json` version in sync with the tag. This repo is at `0.1.0` for the first public zip.
 
 ## Permissions
 
