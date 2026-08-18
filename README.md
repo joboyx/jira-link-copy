@@ -4,8 +4,14 @@ Chrome extension that copies a formatted Jira issue link from the current tab.
 
 ## What it copies
 
-- Rich text: `ABC-123: Summary` as a link to `https://<host>/browse/ABC-123`
-- Plain text: `[ABC-123: Summary](https://<host>/browse/ABC-123)`
+- Rich text (normal paste): `ABC-123: Summary` as a link to `https://<host>/browse/ABC-123`
+- Plain text (paste as plain text): `ABC-123: Summary` with no hyperlink
+
+Paste as plain text:
+
+- Windows: Ctrl+Shift+V
+- macOS Cocoa apps: Option-Shift-Command-V (Paste and Match Style)
+- Google Docs and similar web apps: Command-Shift-V (paste without formatting)
 
 The extension reads the issue on:
 

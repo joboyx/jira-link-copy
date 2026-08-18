@@ -2,7 +2,7 @@ import type { JiraIssue } from './format-link';
 import { formatHtml, formatPlainText } from './format-link';
 
 /**
- * Writes a rich HTML link and a markdown fallback to the clipboard.
+ * Writes a rich HTML link and a plain-text label to the clipboard.
  */
 export async function copyIssueLink(issue: JiraIssue): Promise<void> {
   const html = formatHtml(issue);

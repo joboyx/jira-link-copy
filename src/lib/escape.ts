@@ -16,10 +16,3 @@ export function escapeHtml(text: string): string {
 export function escapeAttr(text: string): string {
   return escapeHtml(text);
 }
-
-/**
- * Makes a summary safe to embed in a markdown link label.
- */
-export function escapeMarkdownLabel(text: string): string {
-  return text.replaceAll('[', '\\[').replaceAll(']', '\\]');
-}
