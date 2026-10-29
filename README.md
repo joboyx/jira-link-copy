@@ -19,6 +19,7 @@ Release page: https://github.com/joboyx/jira-link-copy/releases/latest
 
 - Rich text (normal paste): `ABC-123: Summary` as a link to `https://<host>/browse/ABC-123`
 - Plain text (paste as plain text): `ABC-123: Summary` with no hyperlink
+- A label longer than 80 characters is cut and ends with `…`. The link target stays the full URL.
 
 Paste as plain text:
 
