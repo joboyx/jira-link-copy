@@ -57,7 +57,7 @@ describe('label length cap', () => {
 
   it('does not split an emoji at the cut', () => {
     // Each family emoji is one visible character made of several code points.
-    const family = '\u{1F468}‍\u{1F469}‍\u{1F467}';
+    const family = '\u{1F468}\u200D\u{1F469}\u200D\u{1F467}';
     const label = formatLinkLabel({ ...issue, summary: family.repeat(80) });
     expect([
       ...new Intl.Segmenter(undefined, { granularity: 'grapheme' }).segment(label),
@@ -66,7 +66,7 @@ describe('label length cap', () => {
   });
 
   it('does not split a combining mark from its base letter', () => {
-    const accented = 'é';
+    const accented = 'e\u0301';
     const label = formatLinkLabel({ ...issue, summary: accented.repeat(80) });
     expect(label).toBe(`ABC-12: ${accented.repeat(71)}…`);
   });
