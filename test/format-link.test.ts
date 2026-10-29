@@ -71,18 +71,11 @@ describe('label length cap', () => {
     expect(label).toBe(`ABC-12: ${accented.repeat(71)}…`);
   });
 
-  it('cuts before HTML escaping, so entities are not cut or counted', () => {
-    // 'ABC-12: ' + 70 '&' + 'z' + 'tail' is 83 characters, so the cut keeps 79 characters.
-    const html = formatHtml({ ...issue, summary: `${'&'.repeat(70)}ztail` });
+  it('cuts before HTML escaping, so the label ends with a whole entity', () => {
+    // 'ABC-12: ' + 71 '&' + 'tail' is 83 characters, so the 79th kept character is a '&'.
+    const html = formatHtml({ ...issue, summary: `${'&'.repeat(71)}tail` });
     expect(html).toBe(
-      `<a href="https://jira.example.com/browse/ABC-12">ABC-12: ${'&amp;'.repeat(70)}z…</a>`,
-    );
-  });
-
-  it('escapes a < near the cut as a whole entity', () => {
-    const html = formatHtml({ ...issue, summary: `${'x'.repeat(70)}<b>tail` });
-    expect(html).toBe(
-      `<a href="https://jira.example.com/browse/ABC-12">ABC-12: ${'x'.repeat(70)}&lt;…</a>`,
+      `<a href="https://jira.example.com/browse/ABC-12">ABC-12: ${'&amp;'.repeat(71)}…</a>`,
     );
   });
 });
