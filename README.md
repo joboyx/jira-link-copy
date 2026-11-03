@@ -64,15 +64,10 @@ For local reload while you edit, run `npm start` and load `.output/chrome-mv3` t
 
 ## Release
 
-A version tag that matches `v*` starts the Release workflow.
+Every merge to `main` publishes the next patch release from the latest tag, with the Chrome zip attached.
 
-    git tag v0.1.0
-    git push origin v0.1.0
-
-The workflow tests, zips, and attaches the Chrome zip to a GitHub Release.
-You can also run the workflow by hand and pass a tag name.
-
-Keep the `package.json` version in sync with the tag. This repo is at `0.1.0` for the first public zip.
+The `package.json` version is the base. A pull request that raises it releases that version instead:
+`npm version X.Y.0 --no-git-tag-version`.
 
 ## Permissions
 
