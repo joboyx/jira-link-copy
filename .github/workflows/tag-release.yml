@@ -1,0 +1,69 @@
+# Cut a vX.Y.Z tag on every push to main so the Release workflow can publish a
+# GitHub Release with the Chrome zip.
+#
+# A GITHUB_TOKEN tag push does not start other workflows (GitHub recursion
+# guard). After pushing the tag this job dispatches release.yml itself. Keep
+# `on.workflow_dispatch` on release.yml.
+name: tag-release
+
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: tag-release
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+      - name: Tag and dispatch Release
+        run: |
+          set -euo pipefail
+          git fetch --tags origin
+
+          msg=$(git log -1 --pretty=%s)
+          if [[ "$msg" == "chore(release):"* ]]; then
+            echo "skip: incoming commit is already chore(release):"
+            exit 0
+          fi
+
+          if exact=$(git describe --exact-match --tags HEAD 2>/dev/null); then
+            if [[ "$exact" == v* ]]; then
+              echo "skip: HEAD is already tagged $exact"
+              exit 0
+            fi
+          fi
+
+          version=$(node -p "require('./package.json').version")
+          if [[ -z "$version" ]]; then
+            echo "could not read package.json version" >&2
+            exit 1
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          if git rev-parse -q --verify "refs/tags/v${version}" >/dev/null; then
+            IFS=. read -r major minor patch <<<"$version"
+            new="${major}.${minor}.$((patch + 1))"
+            npm version "$new" --no-git-tag-version
+            git add package.json package-lock.json
+            git commit -m "chore(release): v${new}"
+            version="$new"
+          fi
+
+          git tag -a "v${version}" -m "v${version}"
+          git push origin HEAD:main "v${version}"
+          gh workflow run release.yml --ref "v${version}"
