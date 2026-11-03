@@ -64,9 +64,10 @@ For local reload while you edit, run `npm start` and load `.output/chrome-mv3` t
 
 ## Release
 
-Every merge to `main` tags a version and publishes a GitHub Release with the Chrome zip. The version is a patch bump by default.
+Every merge to `main` publishes the next patch release from the latest tag, with the Chrome zip attached.
 
-For a minor or major bump, set the version in the pull request: `npm version X.Y.Z --no-git-tag-version`.
+The `package.json` version is the base. A pull request that raises it releases that version instead:
+`npm version X.Y.0 --no-git-tag-version`.
 
 ## Permissions
 
