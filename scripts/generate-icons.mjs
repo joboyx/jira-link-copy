@@ -6,10 +6,13 @@ import { deflateSync } from 'node:zlib';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT_DIR = join(ROOT, 'public', 'icon');
 
-const BG = [28, 25, 21, 255];
-const PAPER = [243, 230, 201, 255];
-const INK = [28, 25, 21, 255];
-const ACCENT = [196, 92, 38, 255];
+// Tokyo Night palette. The toolbar icon cannot follow the page theme, so it
+// uses a dark tile with a light card that reads on light and dark toolbars.
+const TILE = [26, 27, 38, 255]; // #1a1b26
+const CARD = [192, 202, 245, 255]; // #c0caf5
+const BAR = [122, 162, 247, 255]; // #7aa2f7
+const INK = [26, 27, 38, 255]; // #1a1b26
+const INK_SOFT = [26, 27, 38, 140]; // #1a1b26 at alpha 140
 
 function createPng(size) {
   const pixels = Buffer.alloc(size * size * 4);
@@ -28,20 +31,20 @@ function paint(size, x, y) {
 
   if (inRoundRect(px, py, 22, 30, 86, 68, 10)) {
     if (inCircle(px, py, 36, 64, 8)) {
-      return BG;
+      return TILE;
     }
     if (py >= 30 && py <= 40) {
-      return ACCENT;
+      return BAR;
     }
     if (px > 48 && py > 52 && py < 58 && px < 96) {
       return INK;
     }
     if (px > 48 && py > 64 && py < 69 && px < 84) {
-      return [28, 25, 21, 140];
+      return INK_SOFT;
     }
-    return PAPER;
+    return CARD;
   }
-  return BG;
+  return TILE;
 }
 
 function inRoundRect(x, y, left, top, width, height, radius) {
