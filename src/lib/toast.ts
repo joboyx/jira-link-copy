@@ -1,4 +1,10 @@
+import { loadToastFonts, MONO_FAMILY, SANS_FAMILY } from './fonts';
+import { detectTheme, THEMES, type ThemeName, type ThemeTokens } from './theme';
+
 const ROOT_ID = 'jira-link-copy-root';
+
+const MONO_STACK = `"${MONO_FAMILY}", ui-monospace, "SF Mono", Menlo, monospace`;
+const SANS_STACK = `"${SANS_FAMILY}", system-ui, -apple-system, "Segoe UI", sans-serif`;
 
 export interface ToastInput {
   kind: 'success' | 'error';
@@ -11,6 +17,7 @@ export interface ToastInput {
  * Shows a short confirmation card in the page. Replaces any previous card.
  */
 export function showToast(input: ToastInput): void {
+  void loadToastFonts();
   document.getElementById(ROOT_ID)?.remove();
 
   const host = document.createElement('div');
@@ -22,9 +29,11 @@ export function showToast(input: ToastInput): void {
   host.style.bottom = '24px';
   host.style.pointerEvents = 'none';
 
+  const theme = detectTheme(document, window);
   const shadow = host.attachShadow({ mode: 'open' });
   const card = document.createElement('div');
   card.setAttribute('role', 'status');
+  card.setAttribute('data-theme', theme);
   card.className = `card card-${input.kind}`;
 
   const kicker = document.createElement('div');
@@ -44,7 +53,7 @@ export function showToast(input: ToastInput): void {
   }
 
   const style = document.createElement('style');
-  style.textContent = toastCss();
+  style.textContent = toastCss(theme);
   shadow.append(style, card);
   document.documentElement.append(host);
 
@@ -53,43 +62,66 @@ export function showToast(input: ToastInput): void {
   }, 2800);
 }
 
-function toastCss(): string {
+const TOKEN_PROPERTIES: Readonly<Record<keyof ThemeTokens, string>> = {
+  panel: '--jlc-panel',
+  fg: '--jlc-fg',
+  fg2: '--jlc-fg2',
+  border: '--jlc-border',
+  accent: '--jlc-accent',
+  red: '--jlc-red',
+  shadow: '--jlc-shadow',
+};
+
+function tokenDeclarations(theme: ThemeName): string {
+  const tokens = THEMES[theme];
+  return (Object.keys(TOKEN_PROPERTIES) as (keyof ThemeTokens)[])
+    .map((name) => `${TOKEN_PROPERTIES[name]}: ${tokens[name]};`)
+    .join('\n      ');
+}
+
+function toastCss(theme: ThemeName): string {
   return `
+    .card {
+      ${tokenDeclarations(theme)}
+    }
     .card {
       min-width: 220px;
       max-width: 360px;
       padding: 14px 16px 12px;
-      background: #1c1915;
-      color: #f3e6c9;
-      border: 1px solid #c45c26;
-      box-shadow: 6px 6px 0 #c45c26;
+      background: var(--jlc-panel);
+      color: var(--jlc-fg);
+      border: 1px solid var(--jlc-border);
+      border-radius: 8px;
+      box-shadow: var(--jlc-shadow);
       transform: translateY(8px);
       animation: rise 180ms ease-out forwards;
     }
     .card-error {
-      border-color: #a33b2b;
-      box-shadow: 6px 6px 0 #a33b2b;
+      border-color: var(--jlc-red);
     }
     .kicker {
-      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      font-family: ${MONO_STACK};
       font-size: 10px;
-      letter-spacing: 0.18em;
+      font-weight: 500;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: #c45c26;
+      color: var(--jlc-accent);
       margin-bottom: 6px;
     }
     .card-error .kicker {
-      color: #e39a8e;
+      color: var(--jlc-red);
     }
     .title {
-      font-family: "Iowan Old Style", Palatino, "Palatino Linotype", Georgia, serif;
-      font-size: 16px;
-      line-height: 1.25;
+      font-family: ${MONO_STACK};
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.35;
+      color: var(--jlc-fg);
     }
     .body {
-      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      font-family: ${SANS_STACK};
       font-size: 12px;
-      color: #d9cbb0;
+      color: var(--jlc-fg2);
       margin-top: 6px;
       overflow: hidden;
       text-overflow: ellipsis;

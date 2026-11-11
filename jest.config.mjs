@@ -9,7 +9,7 @@ export default {
   },
   collectCoverage: true,
   coverageProvider: 'v8',
-  collectCoverageFrom: ['src/lib/**/*.ts', '!src/lib/toast.ts', '!src/lib/run-copy.ts'],
+  collectCoverageFrom: ['src/lib/**/*.ts', '!src/lib/run-copy.ts'],
   coverageDirectory: 'coverage',
   coverageReporters: ['text', 'lcov'],
   coverageThreshold: {
