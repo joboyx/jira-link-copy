@@ -6,6 +6,7 @@ export default defineConfig({
     name: 'Jira Link Copy',
     description: 'Copy a formatted Jira issue link from the current tab.',
     permissions: ['activeTab', 'scripting', 'clipboardWrite'],
+    web_accessible_resources: [{ resources: ['fonts/*.woff2'], matches: ['<all_urls>'] }],
     action: {
       default_title: 'Copy Jira issue link',
     },
