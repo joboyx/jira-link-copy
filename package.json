@@ -1,6 +1,6 @@
 {
   "name": "jira-link-copy",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "Chrome extension that copies a formatted Jira issue link from the current tab.",
   "type": "module",

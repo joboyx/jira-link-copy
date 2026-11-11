@@ -34,6 +34,8 @@ The extension reads the issue on:
 
 The copied URL is always the browse URL for that issue, not the board URL.
 
+After each copy, a card in the bottom-right corner shows the result. It uses the Tokyo Night colors on a dark page and Tokyo Day on a light page.
+
 ## Shortcut
 
 Default: Alt+X (Option+X on Mac). Change the shortcut in `chrome://extensions/shortcuts`.
@@ -61,6 +63,11 @@ For local reload while you edit, run `npm start` and load `.output/chrome-mv3` t
 | `npm run build` | Production build                           |
 | `npm test`      | Lint, type coverage, unit tests, and build |
 | `npm run zip`   | Pack a Chrome zip                          |
+| `npm run fonts` | Copy the bundled fonts into `public/fonts` |
+
+## Fonts
+
+The card uses JetBrains Mono and IBM Plex Sans, bundled in `public/fonts` because many Jira sites block web font hosts. Both fonts use the SIL Open Font License 1.1; the license files are next to the fonts.
 
 ## Release
 
